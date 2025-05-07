@@ -5,13 +5,13 @@ import pandas as pd
 import os
 
 # Ruta de la imagen a adjuntar
-imagen = r"C:\Users\JorgeHaraDevs\Desktop\wasapp-contacts-newversionPampa\img\voto11MayoPampa.jpeg"
+imagen = r"C:\Users\JorgeHaraDevs\Desktop\Sender_WAPP\img\voto11MayoPampa.jpeg"
 
 print("Inicio del proceso...")
 
-# Verificar si el archivo Excel existe
-if not os.path.exists(nombre_archivo_excel):
-    print(f"Error: El archivo '{nombre_archivo_excel}' no existe en la ruta especificada")
+# Verificar si la imagen existe
+if not os.path.exists(imagen):
+    print(f"Error: La imagen '{imagen}' no existe en la ruta especificada")
     exit()
 
 # Leer números desde el archivo Excel al inicio y almacenarlos en una lista
