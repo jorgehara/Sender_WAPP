@@ -17,10 +17,37 @@ if not os.path.exists(imagen):
 # Leer números desde el archivo Excel al inicio y almacenarlos en una lista
 def leer_numeros_desde_excel(nombre_archivo):
     try:
-        df = pd.read_excel(nombre_archivo)
-        return df.iloc[:, 0].astype(str).tolist()
+        # Asegurarse de que la ruta sea absoluta
+        ruta_absoluta = os.path.abspath(nombre_archivo)
+        print(f"Leyendo números desde: {ruta_absoluta}")
+        
+        # Leer el Excel específicamente la columna A
+        df = pd.read_excel(ruta_absoluta, usecols=[0])  # Solo lee la columna A
+        
+        # Debugging: Muestra el contenido exacto de cada celda
+        for idx, valor in df.iloc[:, 0].items():
+            print(f"Fila {idx+1}: '{valor}' - Tipo: {type(valor)}")
+        
+        # Convertir todos los números a string y limpiarlos
+        numeros = []
+        for idx, valor in df.iloc[:, 0].items():
+            if pd.notna(valor):  # Verifica que no sea un valor nulo
+                num = str(valor).strip()
+                if num.isdigit():  # Verifica que sean solo números
+                    numeros.append(num)
+        
+        # Muestra información detallada
+        print(f"Se encontraron {len(numeros)} números en el archivo Excel")
+        print("Números encontrados:")
+        for i, num in enumerate(numeros, 1):
+            print(f"  {i}. {num}")
+        
+        return numeros
     except FileNotFoundError:
         print(f"El archivo '{nombre_archivo}' no se encontró en el directorio actual.")
+        return []
+    except Exception as e:
+        print(f"Error al leer el archivo Excel: {str(e)}")
         return []
 
 # Mensaje a enviar
@@ -33,23 +60,37 @@ nombre_archivo_excel = r"contacts\Prueba2.xlsx"
 # Obtiene la lista de números desde el archivo Excel al inicio
 numeros_a_enviar = leer_numeros_desde_excel(nombre_archivo_excel)
 
+# Verificación de números antes de enviar
+print(f"Total de números a procesar: {len(numeros_a_enviar)}")
+print("Números que se procesarán:")
+for i, num in enumerate(numeros_a_enviar, 1):
+    print(f"{i}. {num}")
+
+# Confirmar envío
+input("Presiona Enter para comenzar el envío de mensajes...")
+
 # Función para enviar el mensaje al presionar Enter
 def enviar_mensaje_con_enter(numero, mensaje, index):
     try:
-        numero = "+" + str(numero)
+        # Asegurarse de que el número tenga el formato correcto
+        numero = str(numero).strip()
+        if not numero.startswith('+'):
+            numero = '+' + numero
+        
+        print(f"Intentando enviar mensaje a {numero}")
         
         # Adjunta la imagen y escribe el mensaje
         pwk.sendwhats_image(numero, imagen, mensaje)
-
-        # Espera 4 segundos antes de enviar el siguiente mensaje
-        time.sleep(4)
+        time.sleep(3)  # Esperamos 3 segundos para asegurar la carga
 
         # Simula presionar la tecla Enter
         pyautogui.press('enter')
+        time.sleep(2)  # Esperamos 2 segundos entre mensajes
 
         print(f"Mensaje {index + 1}/{len(numeros_a_enviar)} enviado a {numero} - Estado: Enviado")
+        
     except Exception as e:
-        print(f"Mensaje {index + 1}/{len(numeros_a_enviar)} no se pudo enviar a {numero}: {str(e)}")
+        print(f"Error enviando mensaje a {numero}: {str(e)}")
 
 # Registra el tiempo de inicio del proceso
 tiempo_inicio = time.time()
