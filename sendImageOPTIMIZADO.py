@@ -1,5 +1,10 @@
 #pip freeze > requirements.txt
 #pip install -r requirements.txt
+
+#crear un entorno virtual
+#python -m venv env
+#activar el entorno virtual
+#env\Scripts\activate
 # -*- coding: utf-8 -*-
 
 
