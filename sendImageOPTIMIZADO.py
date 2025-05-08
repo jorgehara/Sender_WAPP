@@ -1,3 +1,8 @@
+#pip freeze > requirements.txt
+#pip install -r requirements.txt
+# -*- coding: utf-8 -*-
+
+
 import pywhatkit as pwk
 import pyautogui
 import time
@@ -51,7 +56,11 @@ def leer_numeros_desde_excel(nombre_archivo):
         return []
 
 # Mensaje a enviar
-mensaje_a_enviar = "¡🗳️💪 Chaco Puede. Lista 653. 🇦🇷 #Vota653!"
+mensaje_a_enviar = "🗳️ *¡Chaco Puede! Lista 653 🇦🇷 #Vota653!*\n" \
+                   "👋🏼 Querido Vecino\n" \
+                   "Este *domingo 11* contamos con vos 🙌🏼\n" \
+                   "Acompañanos con la *Lista 653 para seguir ordenando y haciendo crecer a Pampa del Infierno y el Chaco* 🌱\n" \
+                   "💖 Con cariño *Glenda Seifert*"
 
 # Nombre del archivo Excel que 
 #  los números
@@ -80,12 +89,22 @@ def enviar_mensaje_con_enter(numero, mensaje, index):
         print(f"Intentando enviar mensaje a {numero}")
         
         # Adjunta la imagen y escribe el mensaje
-        pwk.sendwhats_image(numero, imagen, mensaje)
-        time.sleep(3)  # Esperamos 3 segundos para asegurar la carga
-
-        # Simula presionar la tecla Enter
+        pwk.sendwhats_image(numero, imagen, mensaje, tab_close=False, wait_time=20)  # Aumentamos el wait_time
+        
+        # Espera más tiempo para asegurar que la imagen se cargó completamente
+        time.sleep(8)  # Aumentamos el tiempo de espera después de cargar la imagen
+        
+        # Múltiples clics para asegurar el foco
+        pyautogui.click()
+        time.sleep(1)
+        pyautogui.click()
+        time.sleep(1)
+        
+        # Aseguramos que el mensaje se envíe
+        pyautogui.hotkey('ctrl', 'v')  # Intentamos pegar explícitamente
+        time.sleep(2)
         pyautogui.press('enter')
-        time.sleep(2)  # Esperamos 2 segundos entre mensajes
+        time.sleep(5)  # Aumentamos el tiempo de espera entre mensajes
 
         print(f"Mensaje {index + 1}/{len(numeros_a_enviar)} enviado a {numero} - Estado: Enviado")
         
