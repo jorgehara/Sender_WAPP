@@ -15,7 +15,7 @@ import pandas as pd
 import os
 
 # Ruta de la imagen a adjuntar
-imagen = r"C:\Users\JorgeHaraDevs\Desktop\Sender_WAPP\img\voto11MayoPampa.jpeg"
+imagen = r"C:\Users\jorge\Sender_WAPP\img\voto11MayoPampa.jpeg"
 
 print("Inicio del proceso...")
 
