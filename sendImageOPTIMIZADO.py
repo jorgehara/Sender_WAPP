@@ -83,6 +83,24 @@ for i, num in enumerate(numeros_a_enviar, 1):
 # Confirmar envío
 input("Presiona Enter para comenzar el envío de mensajes...")
 
+def cerrar_pestanas_excepto_actual():
+    """Cierra las pestañas adicionales inmediatamente"""
+    try:
+        # Presiona Ctrl + 1 para asegurarse de estar en la primera pestaña
+        pyautogui.hotkey('ctrl', '1')
+        time.sleep(1)
+        
+        # Presiona Ctrl + W varias veces para cerrar pestañas adicionales
+        for _ in range(10):  # Aumentamos a 10 pestañas por si acaso
+            pyautogui.hotkey('ctrl', 'w')
+            time.sleep(0.5)
+        
+        # Vuelve a la pestaña activa
+        pyautogui.hotkey('alt', 'tab')
+        print("Pestañas adicionales cerradas exitosamente")
+    except Exception as e:
+        print(f"Error al cerrar pestañas: {str(e)}")
+
 # Función para enviar el mensaje al presionar Enter
 def enviar_mensaje_con_enter(numero, mensaje, index):
     try:
@@ -94,22 +112,19 @@ def enviar_mensaje_con_enter(numero, mensaje, index):
         print(f"Intentando enviar mensaje a {numero}")
         
         # Adjunta la imagen y escribe el mensaje
-        pwk.sendwhats_image(numero, imagen, mensaje, tab_close=False, wait_time=20)  # Aumentamos el wait_time
+        pwk.sendwhats_image(numero, imagen, mensaje, tab_close=False, wait_time=20)
         
-        # Espera más tiempo para asegurar que la imagen se cargó completamente
-        time.sleep(8)  # Aumentamos el tiempo de espera después de cargar la imagen
+        # Espera para que se complete el envío
+        time.sleep(8)
         
-        # Múltiples clics para asegurar el foco
-        pyautogui.click()
-        time.sleep(1)
-        pyautogui.click()
-        time.sleep(1)
-        
-        # Aseguramos que el mensaje se envíe
-        pyautogui.hotkey('ctrl', 'v')  # Intentamos pegar explícitamente
-        time.sleep(2)
+        # Solo presionamos enter para enviar
         pyautogui.press('enter')
-        time.sleep(5)  # Aumentamos el tiempo de espera entre mensajes
+        time.sleep(5)  # Tiempo de espera entre mensajes
+
+        # Si hemos enviado 10 mensajes, cerramos las pestañas
+        if (index + 1) % 10 == 0:
+            print(f"10 mensajes enviados exitosamente. Cerrando pestañas adicionales...")
+            cerrar_pestanas_excepto_actual()
 
         print(f"Mensaje {index + 1}/{len(numeros_a_enviar)} enviado a {numero} - Estado: Enviado")
         
